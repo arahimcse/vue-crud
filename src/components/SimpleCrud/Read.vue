@@ -1,6 +1,6 @@
 <script  setup>
 import axios from 'axios'
-import { ref, onMounted, provide } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
@@ -10,28 +10,25 @@ async function getSingleItem() {
         const response = await axios.get(`https://dummyjson.com/products/${route.params.id}`)
         if (response.status == 200) {
             singleItem.value = response.data
-            provide({"title":"singleItem.title", "description":"singleItem.description"})
-        } else {
-            console.log('Data not fetch')
-        }
+        } 
     } catch (error) {
-        console.log("Network Connection not detected" + error)
+        alert(error.message)
     }
 }
 /**
  * Delete Items
  */
- async function deleteData(data)
+ function deleteData(data)
 {
     try {
-        const response = await axios.delete(`https://dummyjson.com/products/${data}`)
+        const response = axios.delete(`https://dummyjson.com/products/${data}`)
         if(response.status == 200 )
         {
             router.push({path: '/'})
             alert('Deleted item! ' + response.data.title)
         }
     } catch (error) {
-        console.log('Smothing wrong' + error)
+        alert(error.message)
     }
 }
 onMounted(() => {
@@ -52,8 +49,11 @@ onMounted(() => {
         <h3>Category: {{ singleItem.category }}</h3>
         <p><img :src="singleItem.thumbnail" :alt="singleItem.title"></p>
         <p class="text-right">
-            <RouterLink class="bg-blue-500 hover:bg-blue-700 text-white p-2 inline-block mr-2" :to="{name:'updateProduct', params:{id:singleItem.id}}">Edit </RouterLink>
+            <RouterLink class="bg-blue-500 hover:bg-blue-700 text-white p-2 inline-block mr-2" :to="{name: 'home'}">Back to Home </RouterLink>
+            <RouterLink class="bg-blue-500 hover:bg-blue-700 text-white p-2 inline-block mr-2" :to="{name:'updateProduct', params:{id:singleItem.id, query: singleItem}}">Edit </RouterLink>
+            
         <button @click="deleteData(singleItem.id)" class="bg-red-500 hover:bg-red-700 text-white p-2">Delete</button>
+        
         </p>
         
     </section>

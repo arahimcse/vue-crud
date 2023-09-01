@@ -22,9 +22,10 @@ const router = createRouter({
       component: () => import('../components/SimpleCrud/Create.vue')
     },
     {
-      path:"/product/:id",
+      path:"/product/edit/:id",
       name:"updateProduct",
-      component:()=>import('../components/SimpleCrud/Update.vue')
+      component:()=>import('../components/SimpleCrud/Update.vue'),
+      props:true
     },
     {
       path: "/landing",
